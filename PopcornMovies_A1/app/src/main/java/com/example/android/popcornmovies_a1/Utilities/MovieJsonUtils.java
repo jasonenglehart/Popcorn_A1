@@ -1,6 +1,5 @@
 package com.example.android.popcornmovies_a1.Utilities;
 
-import com.example.android.popcornmovies_a1.Data.Globals;
 import com.example.android.popcornmovies_a1.Data.PopcornMovie;
 
 import org.json.JSONArray;
@@ -70,25 +69,4 @@ public class MovieJsonUtils {
         }
     }
 
-    public static void GetMoviesFromJSONPage (JSONObject obj){
-        try {
-            AddMoviesToList(obj.getJSONArray(PARAM_RESULT));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void AddMoviesToList(JSONArray array)  {
-
-        if (array != null){
-            for (int i = 0; i < array.length();i++){
-                try {
-                    Globals.movies.add(new PopcornMovie(array.getJSONObject(i)));
-                }
-                catch (JSONException e){
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

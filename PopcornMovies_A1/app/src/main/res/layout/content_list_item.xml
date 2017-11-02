@@ -1,22 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+
+
+
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
+    android:id="@+id/movie_item"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/gray"
-    android:layout_marginBottom="2dp"
-    android:layout_marginRight="2dp">
+    android:padding="8dp"
+    android:layout_gravity="center"
+    android:gravity="center|top"
 
 
-
-    <ImageView
-        android:id="@+id/img_poster"
+    >
+    <LinearLayout
+        android:id="@+id/movie_item_body"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/movie_title"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"/>
-</FrameLayout>
+        android:background="@color/shadow"
+        android:padding="7dp"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/img_poster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+
+</LinearLayout>

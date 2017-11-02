@@ -3,12 +3,14 @@ package com.example.android.popcornmovies_a1.Utilities;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.example.android.popcornmovies_a1.Data.Globals;
 import com.example.android.popcornmovies_a1.Data.PopcornMovie;
+import com.example.android.popcornmovies_a1.MovieListAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.SoftReference;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -18,9 +20,55 @@ import java.util.ArrayList;
 
 public class PopcornMovieUtils {
 
+    public static final String INITIALIZE =  "INITIALIZE";
+    public static final String CHANGE_SORT=  "CHANGE SORT";
+    public static final String LOG_CONSTRUCTOR = "LOG_CONSTRUCTOR";
 
-    public static void InitializeApp(){
-        SetPosterSize(Globals.DEFAULT_POSTER_SIZE);
+
+    public static final String DEFAULT_POSTER_SIZE = NetworkUtils.SIZE_w342;
+    public static final String DEFAULT_SELECTED_SORT = NetworkUtils.SORT_BY_POPULAR;
+    public static final String LOG_INTERNET_ERROR = "INTERNET_ERROR";
+    public static final int pageSize = 20;
+
+    private ArrayList<PopcornMovie> movies;
+    public ArrayList<PopcornMovie> getMovies(){return movies;}
+
+    public String posterSize;
+    public String selectedSort;
+
+    private int pageNo;
+
+    public PopcornMovieUtils(String sort){SwitchSort(sort);}
+
+    public PopcornMovieUtils(){InitializeApp();}
+
+
+
+    public void GetMoviesFromJSONPage (JSONObject obj){
+        try {
+            AddMoviesToList(obj.getJSONArray(MovieJsonUtils.PARAM_RESULT));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void AddMoviesToList(JSONArray array)  {
+
+        if (array != null){
+            for (int i = 0; i < array.length();i++){
+                try {
+                    this.getMovies().add(new PopcornMovie(array.getJSONObject(i)));
+                }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+    public void InitializeApp(){
+        SetPosterSize(DEFAULT_POSTER_SIZE);
         ResetMovieList();
         SetSort(NetworkUtils.SORT_BY_POPULAR);
         SetPage(1);
@@ -29,7 +77,9 @@ public class PopcornMovieUtils {
         AddMovies();
     }
 
-    public static void SwitchSort(String sort)
+
+
+    public void SwitchSort(String sort)
     {
         SetSort(sort);
         ResetMovieList();
@@ -37,42 +87,49 @@ public class PopcornMovieUtils {
         AddMovies();
     }
 
-    public static void TurnPage(){
+    public void TurnPage(){
         IncrementPage();
         AddMovies();
     }
 
+    public boolean NeedBuffer(int position){return movies.size() - pageSize > position;}
 
-    public boolean NeedBuffer(int position){return Globals.movies.size() - Globals.pageSize > position;}
 
-    private static void AddMovies(){new RetrieveMovies().execute(Globals.pageNo);}
 
-    private static void SetSort(String sort){Globals.SelectedSort = sort;}
+    private void AddMovies(){
+        new RetrieveMovies().execute(pageNo);
+    }
 
-    private static void IncrementPage(){Globals.pageNo++;}
+    public void SetSort(String sort){selectedSort = sort;}
+    private void SetPosterSize(String size){posterSize = size;}
 
-    private static void SetPage(int pageNo){Globals.pageNo = pageNo;}
+    private void IncrementPage(){
+        pageNo++;}
 
-    private static void ResetMovieList(){Globals.movies = new ArrayList<PopcornMovie>();}
+    private void SetPage(int pageNo){
+        this.pageNo = pageNo;}
 
-    private static void SetPosterSize(String size){Globals.posterSize = size;}
+    private void ResetMovieList(){
+        movies = new ArrayList<PopcornMovie>();}
 
-    public static class RetrieveMovies extends AsyncTask<Integer, Void, String> {
+
+
+    public class RetrieveMovies extends AsyncTask<Integer, Void, String> {
 
         @Override
         protected String doInBackground(Integer... integers) {
             if(integers.length == 0)
                 return null;
             else{
-                URL Url  =  NetworkUtils.getMovieURL(integers[0], Globals.SelectedSort);
+                URL Url  =  NetworkUtils.getMovieURL(integers[0], selectedSort);
                 return NetworkUtils.getDataFromHTTP(Url);
             }
         }
 
         @Override
         protected void onPostExecute(String s) {
-            if (Globals.movies == null)
-                Log.e(Globals.LOG_INTERNET_ERROR,"Globals.movies is null");
+            if (movies == null)
+                Log.e(LOG_INTERNET_ERROR,"This.movies is null");
             else{
                 JSONObject page = null;
                 try {
@@ -80,11 +137,16 @@ public class PopcornMovieUtils {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (page != null)
-                    MovieJsonUtils.GetMoviesFromJSONPage(page);
+                if (page != null){
+                    GetMoviesFromJSONPage(page);
+                    int test;
+                    test = 1;
+                }
                 else
-                    Log.e(Globals.LOG_INTERNET_ERROR,"JSONObject page is null");
+                    Log.e(LOG_INTERNET_ERROR,"JSONObject page is null");
             }
+
+
         }
     }
 }

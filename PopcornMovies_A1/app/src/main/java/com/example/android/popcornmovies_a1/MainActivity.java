@@ -9,20 +9,17 @@ import android.support.v7.widget.RecyclerView;
 import com.example.android.popcornmovies_a1.Utilities.PopcornMovieUtils;
 
 public class MainActivity extends AppCompatActivity {
-    MovieListAdapter mAdapeter;
     RecyclerView mRecyclerview;
     Context context;
+    MovieListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        PopcornMovieUtils.InitializeApp();
-
-        mAdapeter = new MovieListAdapter();
+        adapter = new MovieListAdapter();
         mRecyclerview = (RecyclerView) findViewById(R.id.rv_main);
-        mRecyclerview.setAdapter(mAdapeter);
+        mRecyclerview.setAdapter(adapter);
 
         context = getApplicationContext();
 

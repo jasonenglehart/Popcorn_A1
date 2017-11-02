@@ -66,7 +66,7 @@ public class PopcornMovie {
     }
     //PosterPath excludes '\/'
     public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath.substring(2);
+        this.posterPath = posterPath.substring(1);
     }
     public int[] getGenre() {
         return genre;

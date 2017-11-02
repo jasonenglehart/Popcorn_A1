@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.PublicKey;
 import java.util.Scanner;
 
 /**
@@ -31,7 +32,8 @@ public class NetworkUtils {
 
 
     public static final String MOVIE_URL_PATH = "http://api.themoviedb.org/3";
-    public static final String API_KEY = "the api key";
+    public static final String API_KEY = "your code here";
+    public static final String PARAM_API = "api_key";
     public static final String PARAM_PAGE = "page";
     public static final String SORT_BY_POPULAR = "movie/popular";
     public static final String SORT_BY_TOP_RATED = "movie/top_rated";
@@ -87,24 +89,28 @@ public class NetworkUtils {
             if (pageNo > 1) {
                 buildUri = Uri.parse(MOVIE_URL_PATH).buildUpon()
                         .appendEncodedPath(SORT_BY_POPULAR)
-                        .appendEncodedPath(API_KEY)
-                        .appendQueryParameter(PARAM_PAGE, Integer.toString(pageNo)).build();
+                        .appendQueryParameter(PARAM_API,API_KEY)
+                        .appendQueryParameter(PARAM_PAGE,String.valueOf(pageNo))
+                        .build();
             } else {
                 buildUri = Uri.parse(MOVIE_URL_PATH).buildUpon()
                         .appendEncodedPath(SORT_BY_POPULAR)
-                        .appendEncodedPath(API_KEY).build();
+                        .appendQueryParameter(PARAM_API,API_KEY)
+                        .build();
             }
         }
         else if(mode == SORT_BY_TOP_RATED){
             if (pageNo > 1) {
                 buildUri = Uri.parse(MOVIE_URL_PATH).buildUpon()
                         .appendEncodedPath(SORT_BY_TOP_RATED)
-                        .appendEncodedPath(API_KEY)
-                        .appendQueryParameter(PARAM_PAGE, Integer.toString(pageNo)).build();
+                        .appendQueryParameter(PARAM_API,API_KEY)
+                        .appendQueryParameter(PARAM_PAGE,String.valueOf(pageNo))
+                        .build();
             } else {
                 buildUri = Uri.parse(MOVIE_URL_PATH).buildUpon()
                         .appendEncodedPath(SORT_BY_TOP_RATED)
-                        .appendEncodedPath(API_KEY).build();
+                        .appendQueryParameter(PARAM_API,API_KEY)
+                        .build();
             }
         }
         else
