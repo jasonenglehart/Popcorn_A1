@@ -39,6 +39,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         controller = new PopcornMovieUtils();
         controller.SetSort(PopcornMovieUtils.DEFAULT_SELECTED_SORT);
         controller.posterSize = PopcornMovieUtils.DEFAULT_POSTER_SIZE;
+        notifyDataSetChanged();
     }
 
     @Override

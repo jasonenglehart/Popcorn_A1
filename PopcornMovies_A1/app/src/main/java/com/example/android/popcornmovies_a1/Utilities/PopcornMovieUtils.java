@@ -23,6 +23,7 @@ public class PopcornMovieUtils {
     public static final String INITIALIZE =  "INITIALIZE";
     public static final String CHANGE_SORT=  "CHANGE SORT";
     public static final String LOG_CONSTRUCTOR = "LOG_CONSTRUCTOR";
+    public static final String JSON_2_POPCORN_MOVIE = "JSON_2_POPCORN_MOVIE";
 
 
     public static final String DEFAULT_POSTER_SIZE = NetworkUtils.SIZE_w342;
@@ -44,11 +45,12 @@ public class PopcornMovieUtils {
 
 
 
-    public void GetMoviesFromJSONPage (JSONObject obj){
+    /*public void GetMoviesFromJSONPage (JSONObject obj){
         try {
             AddMoviesToList(obj.getJSONArray(MovieJsonUtils.PARAM_RESULT));
         } catch (JSONException e) {
             e.printStackTrace();
+
         }
     }
 
@@ -64,7 +66,7 @@ public class PopcornMovieUtils {
                 }
             }
         }
-    }
+    }*/
 
 
     public void InitializeApp(){
@@ -94,7 +96,9 @@ public class PopcornMovieUtils {
 
     public boolean NeedBuffer(int position){return movies.size() - pageSize > position;}
 
-
+    public void addMovieToList(PopcornMovie movie){
+        movies.add((PopcornMovie) movie);
+    }
 
     private void AddMovies(){
         new RetrieveMovies().execute(pageNo);
@@ -132,13 +136,25 @@ public class PopcornMovieUtils {
                 Log.e(LOG_INTERNET_ERROR,"This.movies is null");
             else{
                 JSONObject page = null;
+                JSONArray movieJSONList = null;
                 try {
                     page = new JSONObject(s);
+                    movieJSONList = page.getJSONArray(MovieJsonUtils.PARAM_RESULT);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 if (page != null){
-                    GetMoviesFromJSONPage(page);
+                    for(int i = 0; i < movieJSONList.length(); i++){
+                        PopcornMovie movie= null;
+                        try {
+                            movie = new PopcornMovie(movieJSONList.getJSONObject(i));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e(JSON_2_POPCORN_MOVIE, "Popcorn Object not able to be made");
+                        }
+                        addMovieToList(movie);
+                    }
                     int test;
                     test = 1;
                 }
