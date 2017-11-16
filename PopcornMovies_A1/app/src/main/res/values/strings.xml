@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">PopcornMovies_A1</string>
+    <string name="app_name">Popcorn Movies</string>
+
+    <string name="genreField">Genre:\u0020</string>
+    <string name="languageField">Language:\u0020 </string>
+    <string name="releaseDateField">Released Date:\u0020 </string>
+    <string name="voteAvgField">Vote AVG:\u0020 </string>
+    <string name="voteCountField">\u0020Count:\u0020 </string>
+    <string name="popularityField">Popularity:\u0020 </string>
+    <string name="overview">Overview:</string>
+
+    <string name="mature">Mature Content</string>
+
+    <string name="sortByPopular">Sort By: Popular</string>
+    <string name="sortByTopRated">Sort By: Top Rated</string>
+
+    <string name="noInternetConnction">No Internet Connection</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="lostInternetConnection">You have lost \ninternet connection</string>
+    <string name="restart">Restart</string>
+
+    <string name="Poster">Movie Poster</string>
+
 </resources>

@@ -10,9 +10,7 @@
     android:padding="8dp"
     android:layout_gravity="center"
     android:gravity="center|top"
-
-
-    >
+    android:background="@color/black">
     <LinearLayout
         android:id="@+id/movie_item_body"
         android:layout_width="wrap_content"
@@ -21,6 +19,7 @@
         android:padding="7dp"
         android:orientation="vertical">
         <ImageView
+            android:contentDescription="@string/Poster"
             android:id="@+id/img_poster"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,10 +30,11 @@
         <TextView
             android:id="@+id/movie_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="55sp"
             android:textAlignment="center"
             android:textColor="@color/white"
             style="@style/Base.TextAppearance.AppCompat.Title"
+            android:textSize="15sp"
             android:gravity="center"/>
     </LinearLayout>
 

@@ -8,21 +8,20 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.PublicKey;
 import java.util.Scanner;
 
 /**
  * Created by jason on 10/26/2017.
+ * On Line 37 is where you enter in the API CODE
+ *
  */
 
 public class NetworkUtils {
 
-
-    static final String TRACE_TAG = "TRACE";
-    static final String URL_TAG = "URL";
+    private static final String URL_TAG = "URL";
 
 
-    public static final String IMAGE_URL_PATH = "http://image.tmdb.org/t/p";
+    private static final String IMAGE_URL_PATH = "http://image.tmdb.org/t/p";
     public static final String SIZE_w92  = "/w92//";
     public static final String SIZE_w154 = "/w154//";
     public static final String SIZE_w185 = "/w185//";
@@ -31,10 +30,13 @@ public class NetworkUtils {
     public static final String SIZE_w780 = "/w780//";
 
 
-    public static final String MOVIE_URL_PATH = "http://api.themoviedb.org/3";
-    public static final String API_KEY = "your code here";
-    public static final String PARAM_API = "api_key";
-    public static final String PARAM_PAGE = "page";
+    public static final String JSON_GET = "JSON_GET";
+
+    private static final String MOVIE_GENRES_PATH = "https://api.themoviedb.org/3/genre/movie/list";
+    private static final String MOVIE_URL_PATH = "http://api.themoviedb.org/3";
+    private static final String API_KEY = "Your API Code Here";
+    private static final String PARAM_API = "api_key";
+    private static final String PARAM_PAGE = "page";
     public static final String SORT_BY_POPULAR = "movie/popular";
     public static final String SORT_BY_TOP_RATED = "movie/top_rated";
 
@@ -64,7 +66,20 @@ public class NetworkUtils {
     }
 
 
-
+    public static URL getGenreListURL(){
+        Uri buildUri = null;
+        buildUri = Uri.parse(MOVIE_GENRES_PATH).buildUpon()
+                .appendQueryParameter(PARAM_API,API_KEY)
+                .build();
+        URL url = null;
+        try {
+            url = new URL(buildUri.toString());
+        }
+        catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return url;
+    }
 
     public static URL getMoviePosterURL(String picture, String size){
 

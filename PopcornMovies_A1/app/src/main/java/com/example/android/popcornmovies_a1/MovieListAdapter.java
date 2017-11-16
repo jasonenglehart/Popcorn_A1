@@ -16,30 +16,30 @@ import com.squareup.picasso.Picasso;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.crypto.AEADBadTagException;
-
 /**
  * Created by jason on 10/26/2017.
+ * Adapter Class to retrieve data from source and place it into the recylcerView
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.MovieListItem>{
 
 
-    private PopcornMovieUtils controller;
+    PopcornMovieUtils controller;
+    private ArrayList<PopcornMovie> movies;
+    private MovieViewOnClickHandler mClickHandler;
+    String JSON_Genres;
 
 
-
-    public MovieListAdapter(String imageSize, String sort){
-        controller = new PopcornMovieUtils();
-        controller.posterSize = imageSize;
-        controller.SetSort(sort);
-    }
-
-    public MovieListAdapter(){
+    MovieListAdapter(MovieViewOnClickHandler clickHandler){
+        mClickHandler = clickHandler;
+        movies = new ArrayList<>();
         controller = new PopcornMovieUtils();
         controller.SetSort(PopcornMovieUtils.DEFAULT_SELECTED_SORT);
         controller.posterSize = PopcornMovieUtils.DEFAULT_POSTER_SIZE;
-        notifyDataSetChanged();
+    }
+
+    public interface MovieViewOnClickHandler{
+        void onClick(PopcornMovie movie);
     }
 
     @Override
@@ -51,42 +51,51 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         return  new MovieListItem(view);
     }
 
-    public void updateMovieList(ArrayList<PopcornMovie> list){
-        controller.getMovies().addAll(list);
+    void updateMovieList(ArrayList<PopcornMovie> list){
+        movies.addAll(list);
+        notifyDataSetChanged();
     }
-
-
+    void resetMovieList(){
+        movies = new ArrayList<>();
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(MovieListAdapter.MovieListItem holder, int position) {holder.bind(position);}
 
     @Override
-    public int getItemCount() {return controller.getMovies().size();}
+    public int getItemCount() {return movies.size();}
 
-    public class MovieListItem extends RecyclerView.ViewHolder {
+    public class MovieListItem extends RecyclerView.ViewHolder  implements View.OnClickListener{
 
-        public final ImageView poster;
-        public final TextView title;
-        public final Context context;
+        private final ImageView poster;
+        private final TextView title;
+        private final Context context;
+        private int position;
 
-        public MovieListItem(View itemView) {
+        private MovieListItem(View itemView) {
             super(itemView);
             poster = itemView.findViewById(R.id.img_poster);
             title = itemView.findViewById(R.id.movie_title);
             context = itemView.getContext();
+            itemView.setOnClickListener(this);
         }
 
-        public void bind(int position){
-            bindPoster(NetworkUtils.getMoviePosterURL(controller.getMovies().get(position).getPosterPath(), controller.posterSize));
-            title.setText(controller.getMovies().get(position).getTitle());
-            if(controller.NeedBuffer(position)){
-                controller.TurnPage();
-            }
+
+        private void bind(int position){
+            bindPoster(NetworkUtils.getMoviePosterURL(movies.get(position).getPosterPath(), controller.posterSize));
+            title.setText(movies.get(position).getTitle());
+            this.position = position;
         }
 
         private void bindPoster(URL url){
             Picasso.with(context).load(String.valueOf(url)).into(poster);
         }
 
+        @Override
+        public void onClick(View v) {
+            PopcornMovie movie = movies.get(position);
+            mClickHandler.onClick(movie);
+        }
     }
 }

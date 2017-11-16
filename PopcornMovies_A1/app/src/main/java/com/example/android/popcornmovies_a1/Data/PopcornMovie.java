@@ -8,12 +8,30 @@ import java.util.Date;
 
 /**
  * Created by jason on 10/26/2017.
+ * Class that stores all data from MovieDB into movies
  */
 
 public class PopcornMovie {
+    public static final String MOVIE_ID = "MOVIE_ID";
+    public static final String MOVIE_TITLE = "Movie Title";
+    public static final String MOVIE_POSTER = "Poster Path";
+    public static final String MOVIE_GENRE = "Movie Genre";
+    public static final String MOVIE_LANGUAGE = "Movie Language";
+    public static final String MOVIE_RELEASE_DATE = "Movie release date";
+    public static final String MOVIE_POPULARITY = "Movie Popularity";
+    public static final String MOVIE_VOTE_AVG = "Movie VoteAVG";
+    public static final String MOVIE_VOTE_COUNT= "Movie Count";
+    public static final String MOVIE_MATURE= "Movie Mature";
+    public static final String MOVIE_OVERVIEW= "Movie Overview";
+
+    public static final String GENRE_LIST = "Genre List";
+
+
+
+
     private int id;
     private double voteAvg;
-    private double voteCount;
+    private int voteCount;
     private String title;
     private double popularity;
     private String language;
@@ -37,10 +55,10 @@ public class PopcornMovie {
     public void setVoteAvg(double voteAvg) {
         this.voteAvg = voteAvg;
     }
-    public double getVoteCount() {
+    public int getVoteCount() {
         return voteCount;
     }
-    public void setVoteCount(double voteCount) {
+    public void setVoteCount(int voteCount) {
         this.voteCount = voteCount;
     }
     public String getTitle() {
