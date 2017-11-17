@@ -34,7 +34,7 @@ public class NetworkUtils {
 
     private static final String MOVIE_GENRES_PATH = "https://api.themoviedb.org/3/genre/movie/list";
     private static final String MOVIE_URL_PATH = "http://api.themoviedb.org/3";
-    private static final String API_KEY = "Your API Code Here";
+    private static final String API_KEY = "Your Api Key here";
     private static final String PARAM_API = "api_key";
     private static final String PARAM_PAGE = "page";
     public static final String SORT_BY_POPULAR = "movie/popular";

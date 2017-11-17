@@ -46,17 +46,19 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         mReconnect = (Button)findViewById(R.id.reconnect);
         mRestart = (Button)findViewById(R.id.start_again);
         mLostConnection = (LinearLayout)findViewById(R.id.lost_conection_layout);
+        adapter = new MovieListAdapter(this);
         if (isOnline())
-            start();
+            start(adapter.controller.selectedSort);
         else
-            displayStartUpError();
+            displayErrorFullScreen();
     }
 
-    private void start(){
+    private void start(String sort){
         mRecyclerview.setVisibility(View.VISIBLE);
         mErrorMsg.setVisibility(View.GONE);
         mLostConnection.setVisibility(View.GONE);
-        adapter = new MovieListAdapter(this);
+        adapter.resetMovieList();
+        adapter.controller.selectedSort = sort;
         new RetrieveGenres().execute();
         mRecyclerview = (RecyclerView) findViewById(R.id.rv_main);
         mRecyclerview.setAdapter(adapter);
@@ -76,14 +78,14 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
         });
     }
 
-    private void displayStartUpError(){
+    private void displayErrorFullScreen(){
         mRecyclerview.setVisibility(View.GONE);
         mErrorMsg.setVisibility(View.VISIBLE);
         mReconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isOnline())
-                    start();
+                    start(adapter.controller.selectedSort);
             }
         });
     }
@@ -94,9 +96,7 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
             @Override
             public void onClick(View v) {
                 if (isOnline()){
-                    mLostConnection.setVisibility(View.GONE);
-                    adapter.resetMovieList();
-                    new RetrieveMovies().execute(1);
+                    start(adapter.controller.selectedSort);
                 }
             }
         });
@@ -138,26 +138,23 @@ public class MainActivity extends AppCompatActivity implements MovieListAdapter.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        mLostConnection.setVisibility(View.GONE);
         int itemID = item.getItemId();
         if (itemID == R.id.sortByMethod){
-            if(adapter.controller.selectedSort == NetworkUtils.SORT_BY_POPULAR){
-                changeSort(NetworkUtils.SORT_BY_TOP_RATED);
-                item.setTitle(getText(R.string.sortByTopRated));
+            if(isOnline()) {
+                if (adapter.controller.selectedSort.equals(NetworkUtils.SORT_BY_POPULAR)){
+                    item.setTitle(getText(R.string.sortByTopRated));
+                    start(NetworkUtils.SORT_BY_TOP_RATED);
+                } else {
+                    item.setTitle(getText(R.string.sortByPopular));
+                    start(NetworkUtils.SORT_BY_POPULAR);
+                }
             }
-            else{
-                changeSort(NetworkUtils.SORT_BY_POPULAR);
-                item.setTitle(getText(R.string.sortByPopular));
-            }
+            else displayErrorFullScreen();
         }
 
         return true;
 
-    }
-
-    private void changeSort(String sort){
-        adapter.controller.selectedSort = sort;
-        adapter.resetMovieList();
-        new RetrieveMovies().execute(1);
     }
 
     public class RetrieveMovies extends AsyncTask<Integer, Void, String> {
